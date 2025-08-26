@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3 uid="uid://dq8pqdfb0i5k1"]
+
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_jtk6r"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1qh4y"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_gun_barrel"]
+size = Vector3(0.05, 0.05, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gun_body"]
+size = Vector3(0.15, 0.1, 0.3)
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+script = ExtResource("1_jtk6r")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_1qh4y")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+
+[node name="Gun" type="Node3D" parent="Head/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.3, -0.5)
+
+[node name="GunBarrel" type="MeshInstance3D" parent="Head/Camera3D/Gun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.4)
+mesh = SubResource("BoxMesh_gun_barrel")
+
+[node name="GunBody" type="MeshInstance3D" parent="Head/Camera3D/Gun"]
+mesh = SubResource("BoxMesh_gun_body")
+
+[node name="Muzzle" type="Marker3D" parent="Head/Camera3D/Gun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8)
+
+[node name="PortalGun" type="Node3D" parent="Head/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.3, -0.5)
+visible = false
+
+[node name="PortalGunCore" type="MeshInstance3D" parent="Head/Camera3D/PortalGun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2)
+mesh = SubResource("BoxMesh_gun_body")
+
+[node name="PortalGunBarrel" type="MeshInstance3D" parent="Head/Camera3D/PortalGun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.6)
+mesh = SubResource("BoxMesh_gun_barrel")
+
+[node name="PortalMuzzle" type="Marker3D" parent="Head/Camera3D/PortalGun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8)
+
+[node name="Raycast3D" type="RayCast3D" parent="Head/Camera3D"]
+target_position = Vector3(0, 0, -100)
+enabled = true

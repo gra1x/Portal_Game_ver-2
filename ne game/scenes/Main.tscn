@@ -1,0 +1,276 @@
+[gd_scene load_steps=20 format=3 uid="uid://bxd8yve3nf7b4"]
+
+[ext_resource type="PackedScene" uid="uid://dq8pqdfb0i5k1" path="res://scenes/Player.tscn" id="1_a2k8j"]
+[ext_resource type="PackedScene" uid="uid://c8k7kht3l5xnr" path="res://scenes/UI.tscn" id="2_h7j9l"]
+[ext_resource type="Script" path="res://scripts/GameManager.gd" id="3_m8n0p"]
+[ext_resource type="PackedScene" uid="uid://bfxj4qj4o3knn" path="res://scenes/Pickup.tscn" id="4_pickup"]
+[ext_resource type="PackedScene" uid="uid://cq7j4qj4o3knn" path="res://scenes/JumpPad.tscn" id="5_jumppad"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_1"]
+vertices = PackedFloat32Array(-25, 0, -25, -25, 0, 25, 25, 0, 25, 25, 0, -25, -14, 3, 6, -14, 3, 10, -10, 3, 10, -10, 3, 6, 8, 3, 8, 8, 3, 12, 12, 3, 12, 12, 3, 8, 13, 7, -12, 13, 7, -8, 17, 7, -8, 17, 7, -12, -7, 4, -17, -7, 4, -13, -3, 4, -13, -3, 4, -17, 18, 6, -2, 18, 6, 2, 22, 6, 2, 22, 6, -2, -2, 9, -2, -2, 9, 2, 2, 9, 2, 2, 9, -2)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1), PackedInt32Array(7, 6, 4), PackedInt32Array(4, 6, 5), PackedInt32Array(11, 10, 8), PackedInt32Array(8, 10, 9), PackedInt32Array(15, 14, 12), PackedInt32Array(12, 14, 13), PackedInt32Array(19, 18, 16), PackedInt32Array(16, 18, 17), PackedInt32Array(23, 22, 20), PackedInt32Array(20, 22, 21), PackedInt32Array(27, 26, 24), PackedInt32Array(24, 26, 25)]
+agent_height = 2.7
+agent_radius = 0.5
+cell_size = 0.25
+cell_height = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+size = Vector3(60, 1, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(60, 1, 60)
+
+[sub_resource type="BoxMesh" id="BoxMesh_platform"]
+size = Vector3(8, 1, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_platform"]
+size = Vector3(8, 1, 8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_platform_long"]
+size = Vector3(12, 1, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_platform_long"]
+size = Vector3(12, 1, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ramp"]
+size = Vector3(8, 1, 12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ramp"]
+size = Vector3(8, 1, 12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pillar"]
+size = Vector3(2, 8, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pillar"]
+size = Vector3(2, 8, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall"]
+size = Vector3(20, 4, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall"]
+size = Vector3(20, 4, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
+albedo_color = Color(0.4, 0.6, 0.3, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_platform"]
+albedo_color = Color(0.7, 0.5, 0.3, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ramp"]
+albedo_color = Color(0.6, 0.4, 0.4, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.5, 0.5, 0.6, 1)
+
+[node name="Main" type="Node3D"]
+script = ExtResource("3_m8n0p")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_1")
+
+[node name="Level" type="Node3D" parent="NavigationRegion3D"]
+
+[node name="Ground" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_ground")
+surface_material_override/0 = SubResource("StandardMaterial3D_ground")
+
+[node name="GroundCollision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/GroundCollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_ground")
+
+[node name="Platform1" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2.5, 10)
+mesh = SubResource("BoxMesh_platform")
+surface_material_override/0 = SubResource("StandardMaterial3D_platform")
+
+[node name="Platform1Collision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/Platform1Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2.5, 10)
+shape = SubResource("BoxShape3D_platform")
+
+[node name="Platform2" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 4.5, 8)
+mesh = SubResource("BoxMesh_platform")
+surface_material_override/0 = SubResource("StandardMaterial3D_platform")
+
+[node name="Platform2Collision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/Platform2Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 4.5, 8)
+shape = SubResource("BoxShape3D_platform")
+
+[node name="Platform3" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 6.5, -10)
+mesh = SubResource("BoxMesh_platform")
+surface_material_override/0 = SubResource("StandardMaterial3D_platform")
+
+[node name="Platform3Collision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/Platform3Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 6.5, -10)
+shape = SubResource("BoxShape3D_platform")
+
+[node name="LongPlatform1" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 3.5, -15)
+mesh = SubResource("BoxMesh_platform_long")
+surface_material_override/0 = SubResource("StandardMaterial3D_platform")
+
+[node name="LongPlatform1Collision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/LongPlatform1Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 3.5, -15)
+shape = SubResource("BoxShape3D_platform_long")
+
+[node name="LongPlatform2" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 20, 5.5, 0)
+mesh = SubResource("BoxMesh_platform_long")
+surface_material_override/0 = SubResource("StandardMaterial3D_platform")
+
+[node name="LongPlatform2Collision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/LongPlatform2Collision"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 20, 5.5, 0)
+shape = SubResource("BoxShape3D_platform_long")
+
+[node name="Ramp1" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 1, 15)
+mesh = SubResource("BoxMesh_ramp")
+surface_material_override/0 = SubResource("StandardMaterial3D_ramp")
+
+[node name="Ramp1Collision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/Ramp1Collision"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 1, 15)
+shape = SubResource("BoxShape3D_ramp")
+
+[node name="Ramp2" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(0, 0, -1, 0.433013, 0.866025, 0, 0.866025, -0.433013, 0, -20, 2, 5)
+mesh = SubResource("BoxMesh_ramp")
+surface_material_override/0 = SubResource("StandardMaterial3D_ramp")
+
+[node name="Ramp2Collision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/Ramp2Collision"]
+transform = Transform3D(0, 0, -1, 0.433013, 0.866025, 0, 0.866025, -0.433013, 0, -20, 2, 5)
+shape = SubResource("BoxShape3D_ramp")
+
+[node name="Pillar1" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 4, -5)
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = SubResource("StandardMaterial3D_wall")
+
+[node name="Pillar1Collision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/Pillar1Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 4, -5)
+shape = SubResource("BoxShape3D_pillar")
+
+[node name="Pillar2" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 3, -8)
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = SubResource("StandardMaterial3D_wall")
+
+[node name="Pillar2Collision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/Pillar2Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 3, -8)
+shape = SubResource("BoxShape3D_pillar")
+
+[node name="Wall1" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -25)
+mesh = SubResource("BoxMesh_wall")
+surface_material_override/0 = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall1Collision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/Wall1Collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -25)
+shape = SubResource("BoxShape3D_wall")
+
+[node name="Wall2" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25, 2, 0)
+mesh = SubResource("BoxMesh_wall")
+surface_material_override/0 = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall2Collision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/Wall2Collision"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25, 2, 0)
+shape = SubResource("BoxShape3D_wall")
+
+[node name="HighPlatform" type="MeshInstance3D" parent="NavigationRegion3D/Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, 0)
+mesh = SubResource("BoxMesh_platform")
+surface_material_override/0 = SubResource("StandardMaterial3D_platform")
+
+[node name="HighPlatformCollision" type="StaticBody3D" parent="NavigationRegion3D/Level"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Level/HighPlatformCollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, 0)
+shape = SubResource("BoxShape3D_platform")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 10, 0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("1_a2k8j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="UI" parent="." instance=ExtResource("2_h7j9l")]
+
+[node name="Pickups" type="Node3D" parent="."]
+
+[node name="HealthPickup1" parent="Pickups" instance=ExtResource("4_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 4, 10)
+pickup_type = 0
+
+[node name="AmmoPickup1" parent="Pickups" instance=ExtResource("4_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 6, 8)
+pickup_type = 1
+
+[node name="HealthPickup2" parent="Pickups" instance=ExtResource("4_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 8, -10)
+pickup_type = 0
+
+[node name="AmmoPickup2" parent="Pickups" instance=ExtResource("4_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 5, -15)
+pickup_type = 1
+
+[node name="HealthPickup3" parent="Pickups" instance=ExtResource("4_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 7, 0)
+pickup_type = 0
+
+[node name="AmmoPickup3" parent="Pickups" instance=ExtResource("4_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+pickup_type = 1
+
+[node name="HealthPickup4" parent="Pickups" instance=ExtResource("4_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, 5)
+pickup_type = 0
+
+[node name="AmmoPickup4" parent="Pickups" instance=ExtResource("4_pickup")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2, -8)
+pickup_type = 1
+
+[node name="JumpPads" type="Node3D" parent="."]
+
+[node name="JumpPad1" parent="JumpPads" instance=ExtResource("5_jumppad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.5, 6)
+jump_force = 12.0
+
+[node name="JumpPad2" parent="JumpPads" instance=ExtResource("5_jumppad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.5, -5)
+jump_force = 15.0
+
+[node name="JumpPad3" parent="JumpPads" instance=ExtResource("5_jumppad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.5, -12)
+jump_force = 18.0
+
+[node name="JumpPad4" parent="JumpPads" instance=ExtResource("5_jumppad")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, 15)
+jump_force = 14.0

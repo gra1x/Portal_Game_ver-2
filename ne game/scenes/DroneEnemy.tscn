@@ -1,0 +1,94 @@
+[gd_scene load_steps=8 format=3 uid="uid://b8j3m4k9q7s1x"]
+
+[ext_resource type="Script" path="res://scripts/DroneEnemy.gd" id="1_drone"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_drone"]
+radius = 0.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_body_drone"]
+radius = 0.5
+rings = 8
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_propeller"]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_wing"]
+size = Vector3(0.8, 0.1, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_drone"]
+albedo_color = Color(0.2, 0.2, 0.8, 1)
+emission_enabled = true
+emission = Color(0.1, 0.1, 0.3, 1)
+metallic = 0.7
+roughness = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_propeller"]
+albedo_color = Color(0.8, 0.8, 0.8, 1)
+emission_enabled = true
+emission = Color(0.2, 0.2, 0.2, 1)
+metallic = 0.9
+roughness = 0.1
+
+[node name="DroneEnemy" type="CharacterBody3D" groups=["enemies"]]
+script = ExtResource("1_drone")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("SphereShape3D_drone")
+
+[node name="Model" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Body" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("SphereMesh_body_drone")
+surface_material_override/0 = SubResource("StandardMaterial3D_drone")
+
+[node name="LeftWing" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, 0)
+mesh = SubResource("BoxMesh_wing")
+surface_material_override/0 = SubResource("StandardMaterial3D_drone")
+
+[node name="RightWing" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 0)
+mesh = SubResource("BoxMesh_wing")
+surface_material_override/0 = SubResource("StandardMaterial3D_drone")
+
+[node name="TopPropeller" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("CylinderMesh_propeller")
+surface_material_override/0 = SubResource("StandardMaterial3D_propeller")
+
+[node name="BottomPropeller" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
+mesh = SubResource("CylinderMesh_propeller")
+surface_material_override/0 = SubResource("StandardMaterial3D_propeller")
+
+[node name="LeftPropeller" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -0.8, 0, 0)
+mesh = SubResource("CylinderMesh_propeller")
+surface_material_override/0 = SubResource("StandardMaterial3D_propeller")
+
+[node name="RightPropeller" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0.8, 0, 0)
+mesh = SubResource("CylinderMesh_propeller")
+surface_material_override/0 = SubResource("StandardMaterial3D_propeller")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+radius = 0.6
+height = 1.0
+path_height_offset = 0.5
+
+[node name="VisionArea" type="Area3D" parent="."]
+
+[node name="VisionShape" type="CollisionShape3D" parent="VisionArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 2.5
+one_shot = true
+
+[node name="AlertSound" type="AudioStreamPlayer3D" parent="."]

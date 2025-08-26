@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3 uid="uid://c5qk8h7vp2m1r"]
+
+[ext_resource type="Script" path="res://scripts/ScoutEnemy.gd" id="1_scout"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_scout"]
+radius = 0.3
+height = 2.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_head_scout"]
+size = Vector3(0.4, 0.4, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_body_scout"]
+size = Vector3(0.6, 1.0, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_arm_scout"]
+size = Vector3(0.2, 0.6, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_leg_scout"]
+size = Vector3(0.25, 0.7, 0.25)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_scout"]
+albedo_color = Color(0.2, 0.8, 0.2, 1)
+emission_enabled = true
+emission = Color(0.1, 0.3, 0.1, 1)
+metallic = 0.3
+
+[node name="ScoutEnemy" type="CharacterBody3D" groups=["enemies"]]
+script = ExtResource("1_scout")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+shape = SubResource("CapsuleShape3D_scout")
+
+[node name="Model" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="Head" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("BoxMesh_head_scout")
+surface_material_override/0 = SubResource("StandardMaterial3D_scout")
+
+[node name="Body" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_body_scout")
+surface_material_override/0 = SubResource("StandardMaterial3D_scout")
+
+[node name="LeftArm" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.2, 0)
+mesh = SubResource("BoxMesh_arm_scout")
+surface_material_override/0 = SubResource("StandardMaterial3D_scout")
+
+[node name="RightArm" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.2, 0)
+mesh = SubResource("BoxMesh_arm_scout")
+surface_material_override/0 = SubResource("StandardMaterial3D_scout")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, -0.8, 0)
+mesh = SubResource("BoxMesh_leg_scout")
+surface_material_override/0 = SubResource("StandardMaterial3D_scout")
+
+[node name="RightLeg" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.8, 0)
+mesh = SubResource("BoxMesh_leg_scout")
+surface_material_override/0 = SubResource("StandardMaterial3D_scout")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+radius = 0.4
+height = 2.2
+path_height_offset = 0.5
+
+[node name="VisionArea" type="Area3D" parent="."]
+
+[node name="VisionShape" type="CollisionShape3D" parent="VisionArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 1.0
+one_shot = true
+
+[node name="AlertSound" type="AudioStreamPlayer3D" parent="."]

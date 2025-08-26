@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3 uid="uid://bq8x7k2m9p4v3"]
+
+[ext_resource type="Script" path="res://scripts/Elevator.gd" id="1_elevator"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_platform"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_platform"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_area"]
+size = Vector3(3.5, 3, 3.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_door"]
+size = Vector3(1.8, 2.5, 0.1)
+
+[node name="Elevator" type="StaticBody3D"]
+script = ExtResource("1_elevator")
+
+[node name="Platform" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_platform")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_platform")
+
+[node name="LeftDoor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.25, 2)
+mesh = SubResource("BoxMesh_door")
+
+[node name="RightDoor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.25, 2)
+mesh = SubResource("BoxMesh_door")
+
+[node name="CallArea" type="Area3D" parent="."]
+
+[node name="CallAreaShape" type="CollisionShape3D" parent="CallArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 3)
+shape = SubResource("BoxShape3D_area")
+
+[node name="ElevatorArea" type="Area3D" parent="."]
+
+[node name="ElevatorAreaShape" type="CollisionShape3D" parent="ElevatorArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_area")
+
+[node name="FloorDisplay" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 1.9)
+text = "Floor 1"
+font_size = 24
+
+[node name="ButtonPanel" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 1.5, 1.9)
+
+[node name="MovementSound" type="AudioStreamPlayer3D" parent="."]
+
+[node name="DoorSound" type="AudioStreamPlayer3D" parent="."]
+
+[node name="ArrivalSound" type="AudioStreamPlayer3D" parent="."]

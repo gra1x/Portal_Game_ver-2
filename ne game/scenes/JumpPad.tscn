@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://cq7j4qj4o3knn"]
+
+[ext_resource type="Script" path="res://scripts/JumpPad.gd" id="1_jumppad"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1"]
+height = 0.3
+top_radius = 1.2
+bottom_radius = 1.2
+
+[sub_resource type="AudioStream" id="AudioStream_1"]
+
+[node name="JumpPad" type="Area3D" groups=["jump_pads"]]
+script = ExtResource("1_jumppad")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_1")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="EffectParticles" type="GPUParticles3D" parent="."]
+
+[node name="JumpSound" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStream_1")
+
+[node name="CooldownTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true

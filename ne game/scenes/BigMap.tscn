@@ -1,0 +1,163 @@
+[gd_scene load_steps=10 format=3 uid="uid://bw7x5k3j9m2h8"]
+
+[ext_resource type="PackedScene" uid="uid://b1vbfmpov3kx6" path="res://scenes/Player.tscn" id="1_a5d7k"]
+[ext_resource type="PackedScene" uid="uid://dflj1k7n8q5p2" path="res://scenes/Enemy.tscn" id="2_b8f9l"]
+[ext_resource type="PackedScene" uid="uid://cmnvj8r2qw1ls" path="res://scenes/MovingPlatform.tscn" id="4_d0h1n"]
+[ext_resource type="PackedScene" uid="uid://c8kj7m9n2q5r1" path="res://scenes/JumpPad.tscn" id="5_e1i2o"]
+[ext_resource type="PackedScene" uid="uid://b7x4k8l9m3n6p" path="res://scenes/Pickup.tscn" id="6_f2j3q"]
+[ext_resource type="PackedScene" uid="uid://c4h7l0m5n8q1t" path="res://scenes/UI.tscn" id="7_g3k4r"]
+
+[sub_resource type="Environment" id="Environment_1s2u3"]
+background_mode = 1
+background_color = Color(0.2, 0.2, 0.3, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.8, 0.8, 1, 1)
+ambient_light_energy = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_4v5w6"]
+size = Vector3(150, 1, 150)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7x8y9"]
+size = Vector3(150, 1, 150)
+
+[node name="BigMap" type="Node3D"]
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_1s2u3")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 10, 0)
+light_energy = 1.0
+shadow_enabled = true
+
+[node name="Terrain" type="Node3D" parent="."]
+
+[node name="MainFloor" type="StaticBody3D" parent="Terrain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Terrain/MainFloor"]
+mesh = SubResource("BoxMesh_4v5w6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Terrain/MainFloor"]
+shape = SubResource("BoxShape3D_7x8y9")
+
+[node name="MovingPlatforms" type="Node3D" parent="."]
+
+[node name="LinearPlatform1" parent="MovingPlatforms" instance=ExtResource("4_d0h1n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 5, 20)
+movement_type = "linear"
+waypoints = Array[Vector3]([Vector3(20, 5, 20), Vector3(35, 5, 20), Vector3(35, 5, 35), Vector3(20, 5, 35)])
+
+[node name="LinearPlatform2" parent="MovingPlatforms" instance=ExtResource("4_d0h1n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 8, -20)
+movement_type = "linear"
+waypoints = Array[Vector3]([Vector3(-20, 8, -20), Vector3(-35, 8, -20), Vector3(-35, 12, -35), Vector3(-20, 12, -35)])
+
+[node name="CircularPlatform1" parent="MovingPlatforms" instance=ExtResource("4_d0h1n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 40)
+movement_type = "circular"
+radius = 8.0
+move_speed = 1.0
+
+[node name="PendulumPlatform1" parent="MovingPlatforms" instance=ExtResource("4_d0h1n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 10, 0)
+movement_type = "pendulum"
+waypoints = Array[Vector3]([Vector3(-40, 10, 0), Vector3(-40, 10, 15)])
+move_speed = 1.5
+
+[node name="PendulumPlatform2" parent="MovingPlatforms" instance=ExtResource("4_d0h1n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 12, -30)
+movement_type = "pendulum"
+waypoints = Array[Vector3]([Vector3(40, 12, -30), Vector3(55, 12, -30)])
+move_speed = 2.0
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="RegularEnemy1" parent="Enemies" instance=ExtResource("2_b8f9l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 1, 10)
+
+[node name="RegularEnemy2" parent="Enemies" instance=ExtResource("2_b8f9l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, -30)
+
+[node name="RegularEnemy3" parent="Enemies" instance=ExtResource("2_b8f9l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, -15)
+
+[node name="RegularEnemy4" parent="Enemies" instance=ExtResource("2_b8f9l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 1, 25)
+
+[node name="JumpPads" type="Node3D" parent="."]
+
+[node name="JumpPad1" parent="JumpPads" instance=ExtResource("5_e1i2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
+
+[node name="JumpPad2" parent="JumpPads" instance=ExtResource("5_e1i2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 15)
+
+[node name="JumpPad3" parent="JumpPads" instance=ExtResource("5_e1i2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, -25)
+
+[node name="JumpPad4" parent="JumpPads" instance=ExtResource("5_e1i2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, -10)
+
+[node name="JumpPad5" parent="JumpPads" instance=ExtResource("5_e1i2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 35)
+
+[node name="JumpPad6" parent="JumpPads" instance=ExtResource("5_e1i2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0, 0)
+
+[node name="Pickups" type="Node3D" parent="."]
+
+[node name="HealthPickup1" parent="Pickups" instance=ExtResource("6_f2j3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, 18)
+pickup_type = "health"
+
+[node name="AmmoPickup1" parent="Pickups" instance=ExtResource("6_f2j3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 1, 12)
+pickup_type = "ammo"
+
+[node name="HealthPickup2" parent="Pickups" instance=ExtResource("6_f2j3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 1, -18)
+pickup_type = "health"
+
+[node name="AmmoPickup2" parent="Pickups" instance=ExtResource("6_f2j3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 1, -12)
+pickup_type = "ammo"
+
+[node name="HealthPickup3" parent="Pickups" instance=ExtResource("6_f2j3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 25)
+pickup_type = "health"
+
+[node name="AmmoPickup3" parent="Pickups" instance=ExtResource("6_f2j3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 1, 0)
+pickup_type = "ammo"
+
+[node name="HealthPickup4" parent="Pickups" instance=ExtResource("6_f2j3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 1, 0)
+pickup_type = "health"
+
+[node name="AmmoPickup4" parent="Pickups" instance=ExtResource("6_f2j3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -25)
+pickup_type = "ammo"
+
+[node name="HealthPickup5" parent="Pickups" instance=ExtResource("6_f2j3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 6, 25)
+pickup_type = "health"
+
+[node name="AmmoPickup5" parent="Pickups" instance=ExtResource("6_f2j3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, 9, -25)
+pickup_type = "ammo"
+
+[node name="HealthPickup6" parent="Pickups" instance=ExtResource("6_f2j3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, 40)
+pickup_type = "health"
+
+[node name="AmmoPickup6" parent="Pickups" instance=ExtResource("6_f2j3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 11, 8)
+pickup_type = "ammo"
+
+[node name="Player" parent="." instance=ExtResource("1_a5d7k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="UI" parent="." instance=ExtResource("7_g3k4r")]
